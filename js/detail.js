@@ -7,12 +7,15 @@
         success:function(data){
             var shuju = data.data;
             // var obj = $('.goodsimg');
-            console.log(shuju);
+            // console.log(shuju);
             var str = "";
             for(var i = 0; i<shuju.length;i++){
-                str += '<div class="swiper-slide"><img src="img/'+shuju[i].img+'"/></div>';
-                str += '<div class="swiper-slide"><img src="img/'+shuju[i].img+'"/></div>';
-                str += '<div class="swiper-slide"><img src="img/'+shuju[i].img+'"/></div>';
+                if(storage.getItem('dataid') == shuju[i].id){
+                    str += '<div class="swiper-slide"><img src="img/'+shuju[i].img+'"/></div>';
+                    str += '<div class="swiper-slide"><img src="img/'+shuju[i].img+'"/></div>';
+                    str += '<div class="swiper-slide"><img src="img/'+shuju[i].img+'"/></div>';
+                }
+                $('.btn').attr('goods',shuju[i].id+'');
             }
             $('.swiper-wrapper').append(str);
             var mySwiper = new Swiper ('.swiper-container', {
@@ -82,7 +85,7 @@
                 var num = Math.floor(Math.random()*10+1);
                 arr.push(num);
             }
-            console.log(arr)
+            // console.log(arr)
             for(var i = 0;i<arr.length;i++){
                 for(var j = 0;j<shuju.length;j++){
                     if(shuju[j].id == arr[i]){
@@ -97,7 +100,7 @@
             var listprice = $('.curpr');
             var listold = $('.oldpr');
             var listtitle = $('.guesstitle');
-            console.log(list)
+            // console.log(list)
             for(var i = 0;i<listimg.length;i++){
                 listimg[i].setAttribute('src',"img/"+list[i][0]);
                 listtitle[i].innerHTML = list[i][1];
@@ -141,23 +144,27 @@
       });
 
       $('.collect').on('click',function(){
-        if(storage.getItem('user')){
-            $('.collect').find('.iconfont').css('color','green');
-            alert('收藏成功！');
-        }else{
-            alert('亲您要登录才能收藏哦！点击确定登录');
-            window.location.href = 'html/login.html';
-        }
+            if(storage.getItem('user')){
+                $('.collect').find('.iconfont').css('color','green');
+                alert('收藏成功！');
+            }else{
+                alert('亲您要登录才能收藏哦！点击确定登录');
+                window.location.href = 'html/login.html';
+            }
+        });
         
         $('.btn').on('click',function(){
+            var goodsID = $('.btn').attr('goods');
+            var index = 0;
             if(storage.getItem('user')){
-                
+                ++index;
+                storage.setItem('goodnum'+goodsID,index);
+                storage.setItem(goodsID,goodsID);
             }else{
                 alert('亲您要登录才能加入购物车！点击确定登录');
+                window.location.href = 'html/login.html';
             }
-        }
-
-      })
+        });
 
   })();
   
